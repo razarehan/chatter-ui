@@ -4,13 +4,15 @@ import Auth from "./Auth";
 import { useCreateUser } from "../../hooks/useCreateUser";
 import { useState } from "react";
 import { extractErrorMessage } from "../../utils/errors";
+import useLogin from "../../hooks/useLogin";
 
 const Signup = () => {
   const [createUser] = useCreateUser();
   const [error, setError] = useState("");
+  const { login } = useLogin();
 
   return (
-    <Auth submitLabel="Signup" error={error} onSubmit={async ({email, password}) => {
+    <Auth submitLabel="Signup" error={error} onSubmit={async ({ email, password }) => {
       try {
         await createUser({
           variables: {
@@ -20,16 +22,17 @@ const Signup = () => {
             }
           }
         });
+        await login({ email, password });
         setError("");
-      } catch(err) {
+      } catch (err) {
         const errorMessage = extractErrorMessage(err);
-        if(errorMessage) {
+        if (errorMessage) {
           setError(errorMessage);
           return;
         }
         setError("Unknown error occured.");
       }
-     }}>
+    }}>
       <Link to={'/login'}>
         <MUILink>Login</MUILink>
       </Link>

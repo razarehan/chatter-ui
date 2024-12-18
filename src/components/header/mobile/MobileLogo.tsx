@@ -9,7 +9,10 @@ const MobileLogo = () => {
       variant="h5"
       noWrap
       component="a"
-      onClick={() => router.navigate("/")}
+      onClick={() => {
+        window.location.assign("/");
+        router.navigate("/");
+      }}
       sx={{
         mr: 2,
         display: { xs: 'flex', md: 'none' },

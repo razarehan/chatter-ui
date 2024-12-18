@@ -9,7 +9,6 @@ const Logo = () => {
       noWrap
       component="a"
       onClick={() => {
-        window.location.assign("/");
         router.navigate("/");
       }}
       sx={{

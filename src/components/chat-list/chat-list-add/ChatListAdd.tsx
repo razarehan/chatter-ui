@@ -2,6 +2,7 @@ import { Box, Button, FormControlLabel, FormGroup, IconButton, InputBase, Modal,
 import { useState } from "react";
 import SearchIcon from "@mui/icons-material/Search";
 import { useCreateChat } from "../../../hooks/useCreateChat";
+import { UNKNOWN_ERROR_MESSAGE } from "../../../constants/errors";
 
 interface ChatListAddProps {
   open: boolean;
@@ -10,11 +11,19 @@ interface ChatListAddProps {
 const ChatListAdd = ({ open, handleClose }: ChatListAddProps) => {
   const [isPrivate, setIsPrivate] = useState(true);
   const [name, setName] = useState("");
+  const [error, setError] = useState("");
   const [createChat] = useCreateChat();
+
+  const onClose = () => {
+    setError("");
+    setName("");
+    setIsPrivate(true);
+    handleClose();
+  }
   return <>
     <Modal
       open={open}
-      onClose={handleClose}
+      onClose={onClose}
     >
       <Box
         sx={{
@@ -52,13 +61,26 @@ const ChatListAdd = ({ open, handleClose }: ChatListAddProps) => {
                 </IconButton>
               </Paper>
             ) : (
-              <TextField label="Name" onChange={(event) => setName(event.target.value)} />
+              <TextField
+                label="Name"
+                error={!!error}
+                helperText={error}
+                onChange={(event) => setName(event.target.value)} />
             )
           }
-          <Button onClick={() => {
-            createChat({
-              variables: { createChatInput: { isPrivate, name: name || undefined } }
-            })
+          <Button onClick={async () => {
+            if (name.length == 0) {
+              setError("Chat name is required.");
+              return;
+            }
+            try {
+              await createChat({
+                variables: { createChatInput: { isPrivate, name: name || undefined } }
+              });
+            } catch (err) {
+              setError(UNKNOWN_ERROR_MESSAGE);
+            }
+            onClose();
           }} variant="outlined">Save</Button>
         </Stack>
       </Box>

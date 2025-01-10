@@ -1,19 +1,26 @@
 import { useParams } from "react-router-dom";
 import { useGetChat } from "../../hooks/useGetChat";
-import { Divider, IconButton, InputBase, Paper, Stack } from "@mui/material";
+import { Box, Divider, IconButton, InputBase, Paper, Stack } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import { useCreateMessage } from "../../hooks/useCreateMessage";
 import { useState } from "react";
+import { useGetMessages } from "../../hooks/useGetMessages";
 const Chat = () => {
   let params = useParams<{ _id: string }>();
   const chatId = params?._id || '';
   const [message, setMessage] = useState("");
   const { data } = useGetChat({ _id: chatId! });
   const [createMessage] = useCreateMessage();
-
+  const { data: messages } = useGetMessages({chatId});
   return <>
     <Stack sx={{ height: '100%', justifyContent: 'space-between' }}>
       <h1>{data?.chat.name}</h1>
+      <Box>
+        {messages?.messages.map(message => (
+          <p>{message.content}</p>
+
+        ))}
+      </Box>
       <Paper sx={{
         p: '2px 4px',
         display: 'flex',

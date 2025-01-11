@@ -9,14 +9,17 @@ import router from '../../Routes';
 import { Chat } from '../../../gql/graphql';
 
 interface ChatListProps {
-  chat: Chat
+  chat: Chat;
+  selected: boolean;
 }
 
-const ChatListItem = ({ chat }: ChatListProps) => {
+const ChatListItem = ({ chat, selected }: ChatListProps) => {
   return (
     <>
       <ListItem alignItems="flex-start" disablePadding>
-        <ListItemButton onClick={() => router.navigate(`/chats/${chat._id}`)}>
+        <ListItemButton 
+          selected={selected}
+          onClick={() => router.navigate(`/chats/${chat._id}`)}>
           <ListItemAvatar>
             <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
           </ListItemAvatar>

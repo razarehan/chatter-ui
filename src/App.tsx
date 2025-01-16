@@ -6,7 +6,7 @@ import client from './constants/apollo-client';
 import Guard from './components/auth/Guard';
 import Header from './components/header/Header';
 import Snackbar from './components/snackbar/Snackbar';
-import Grid from '@mui/material/Grid2';
+import Grid from '@mui/material/Grid';
 import ChatList from './components/chat-list/ChatList';
 import { usePath } from './hooks/usePath';
 
@@ -24,16 +24,18 @@ function App() {
         <CssBaseline />
         <Header />
         <Guard>
-          {showChatList ? (
-            <Grid container>
-              <Grid size={{ md: 3 }}>
-                <ChatList />
+          <Container maxWidth="xl" sx={{marginTop:'2rem'}}>
+            {showChatList ? (
+              <Grid container spacing={5}>
+                <Grid item xs={12} md={5} lg={4} xl={3}>
+                  <ChatList />
+                </Grid>
+                <Grid xs={12} md={7} lg={8} xl={9}>
+                  <Routes />
+                </Grid>
               </Grid>
-              <Grid size={{ md: 9 }}>
-                <Routes />
-              </Grid>
-            </Grid>
-          ) : <Routes />}
+            ) : <Routes />}
+          </Container>
         </Guard>
         <Snackbar />
       </ThemeProvider>
@@ -43,9 +45,7 @@ function App() {
 
 const Routes = () => {
   return (
-    <Container sx={{height: '100%'}}>
-      <RouterProvider router={router} />
-    </Container>
+    <RouterProvider router={router} />
   );
 }
 export default App;

@@ -24,10 +24,9 @@ export default function ChatList() {
         <ChatListHeader handleAddChat={() => setChatListAddVisible(true)} />
         <Divider />
         <List sx={{
-          maxHeight: '80vh',
+          maxHeight: '70vh',
           overflow: 'auto',
           width: '100%',
-          maxWidth: 360,
           bgcolor: 'background.paper'
         }}>
           {data?.chats.map(chat => (

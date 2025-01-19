@@ -1,5 +1,4 @@
 import { useQuery } from "@apollo/client";
-import { User } from "../models/User";
 import { graphql } from "../gql";
 
 const getMeDocument = graphql(`

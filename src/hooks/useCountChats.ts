@@ -12,8 +12,6 @@ const useCountChats = () => {
       snackVar(UNKNOWN_ERROR_SNACK_MESSAGE);
       return;
     }
-    console.log("REHAN", res);
-    
     setChatsCount(
       parseInt(
         await res.text()

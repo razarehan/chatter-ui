@@ -5,6 +5,9 @@ import SendIcon from "@mui/icons-material/Send";
 import { useCreateMessage } from "../../hooks/useCreateMessage";
 import { useEffect, useRef, useState } from "react";
 import { useGetMessages } from "../../hooks/useGetMessages";
+import { PAGE_SIZE } from "../../constants/page-size";
+import { useCountMessages } from "../../hooks/useCountMessages";
+import InfiniteScroll from "react-infinite-scroller";
 
 const Chat = () => {
   let params = useParams<{ _id: string }>();
@@ -12,16 +15,27 @@ const Chat = () => {
   const [message, setMessage] = useState("");
   const { data } = useGetChat({ _id: chatId! });
   const [createMessage] = useCreateMessage();
-  const { data: messages } = useGetMessages({ chatId });
+  const { data: messages, fetchMore } = useGetMessages({
+    chatId,
+    skip: 0,
+    limit: PAGE_SIZE
+  });
   const divRef = useRef<HTMLDivElement | null>(null);
   const location = useLocation();
+  const { messagesCount, countMessages } = useCountMessages(chatId);
+
+  useEffect(() => {
+    countMessages();
+  }, [countMessages]);
 
   const scrollToBottom = () => divRef.current?.scrollIntoView();
 
   useEffect(() => {
-    setMessage("");
-    scrollToBottom();
-  }, [location, messages]);
+    if (messages?.messages && messages.messages.length <= PAGE_SIZE) {
+      setMessage("");
+      scrollToBottom();
+    }
+  }, [location.pathname, messages]);
 
   const handleCreateMessage = async () => {
     await createMessage({ variables: { createMessageInput: { content: message, chatId } } });
@@ -32,11 +46,20 @@ const Chat = () => {
     <Stack sx={{ height: '100%', justifyContent: 'space-between' }}>
       <h1>{data?.chat.name}</h1>
       <Box sx={{ height: "70vh", overflow: "auto" }}>
-        {messages &&
-          [...messages?.messages]
-            .sort(
-              (messageA, messageB) => 
-                new Date(messageA.createdAt).getTime() - new Date(messageB.createdAt).getTime()
+        <InfiniteScroll
+          pageStart={0}
+          isReverse={true}
+          loadMore={() => fetchMore({ variables: { skip: messages?.messages.length } })}
+          hasMore={
+            messages && messagesCount ? messages.messages.length < messagesCount : false
+          }
+          useWindow={false}
+        >
+          {messages &&
+            [...messages?.messages]
+              .sort(
+                (messageA, messageB) =>
+                  new Date(messageA.createdAt).getTime() - new Date(messageB.createdAt).getTime()
               ).map(message => (
                 <Grid container alignItems="center" marginBottom="1rem">
                   <Grid item xs={2} lg={1}>
@@ -48,12 +71,15 @@ const Chat = () => {
                         <Typography sx={{ padding: "0.9rem" }}>{message.content}</Typography>
                       </Paper>
                       <Typography variant="caption" sx={{ marginLeft: "0.25rem" }}>
-                        {new Date(message.createdAt).toLocaleTimeString()}
+                        {new Date(message.createdAt).toLocaleTimeString()} - {" "}
+                        {new Date(message.createdAt).toLocaleDateString()}
                       </Typography>
                     </Stack>
                   </Grid>
                 </Grid>
-              ))}
+              ))
+          }
+        </InfiniteScroll>
         <div ref={divRef}></div>
       </Box>
       <Paper sx={{

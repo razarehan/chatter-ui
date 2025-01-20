@@ -12,8 +12,12 @@ const useCountMessages = (chatId: string) => {
       snackVar(UNKNOWN_ERROR_SNACK_MESSAGE);
       return;
     }
-    const { messages } = await res.json();
-    setMessagesCount(messages)
+    try {
+      const { messages } = await res.json();
+      setMessagesCount(messages);
+    } catch(err) {
+      setMessagesCount(0);
+    }
   }, [chatId]);
   return { messagesCount, countMessages };
 }

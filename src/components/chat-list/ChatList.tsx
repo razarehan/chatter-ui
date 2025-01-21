@@ -38,7 +38,7 @@ export default function ChatList() {
         <ChatListHeader handleAddChat={() => setChatListAddVisible(true)} />
         <Divider />
         <Box sx={{
-          maxHeight: '70vh',
+          maxHeight: '100%',
           overflow: 'auto',
           width: '100%',
           bgcolor: 'background.paper'

@@ -44,8 +44,8 @@ const Chat = () => {
   }
   return <>
     <Stack sx={{ height: '100%', justifyContent: 'space-between' }}>
-      <h1>{data?.chat.name}</h1>
-      <Box sx={{ height: "70vh", overflow: "auto" }}>
+      <h1 className="chat-header-text">{data?.chat.name}</h1>
+      <Box sx={{ height: "100%", overflow: "auto" }}>
         <InfiniteScroll
           pageStart={0}
           isReverse={true}
@@ -62,10 +62,11 @@ const Chat = () => {
                   new Date(messageA.createdAt).getTime() - new Date(messageB.createdAt).getTime()
               ).map(message => (
                 <Grid container alignItems="center" marginBottom="1rem">
-                  <Grid item xs={2} lg={1}>
-                    <Avatar src="" sx={{ width: 52, height: 52 }}></Avatar>
+                  <Grid item xs={1.5} lg={0.5}>
+                    <Avatar src="" sx={{ width: 32, height: 32 }}></Avatar>
                   </Grid>
-                  <Grid item xs={10} lg={11}>
+                  <Grid xs={0.3} lg={0.1}></Grid>
+                  <Grid item xs={10.2} lg={11.4}>
                     <Stack>
                       <Paper sx={{ width: "fit-content" }}>
                         <Typography sx={{ padding: "0.9rem" }}>{message.content}</Typography>

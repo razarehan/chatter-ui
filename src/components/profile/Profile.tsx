@@ -31,7 +31,7 @@ const Profile = () => {
         justifyContent: "start"
       }}>
       <Typography variant="h3">{me?.data?.me.username}</Typography>
-      <Avatar sx={{ width: 156, height: 156 }}></Avatar>
+      <Avatar sx={{ width: 156, height: 156 }} src={me.data?.me.imageUrl}></Avatar>
       <Button component="label" variant="contained" size="small" startIcon={<UploadFile />}>
         Upload Image
         <input type="file" hidden onChange={handleFileUpload} />

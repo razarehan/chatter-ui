@@ -18,7 +18,8 @@ const darkTheme = createTheme({
 });
 function App() {
   const { path } = usePath();
-  const showChatList = path === '/' || path.includes('chats');
+  const isMobile = window.innerWidth < 900;
+  const showChatList = path === '/' || (path.includes('chats') && !isMobile);
   const theme = useTheme();
   return (
     <ApolloProvider client={client}>
@@ -27,7 +28,7 @@ function App() {
         <div className='main-container'>
           <Header />
           <Guard>
-            <Container className='padd0' maxWidth="xl" sx={{ height: '90vh' }}>
+            <Container className='padd0' maxWidth="xl" sx={{ height: 'calc(100% - 70px)' }}>
               {showChatList ? (
                 <Grid className='pt-n-pb-0' container sx={{
                   margin: '0px',
@@ -40,15 +41,15 @@ function App() {
                   <Grid xs={12} md={5} lg={4} xl={3}>
                     <ChatList />
                   </Grid>
-                  <Grid xs={0} md={0.3} lg={0.3} xl={0.3}></Grid>
-                  <Grid xs={12} md={6.7} lg={7.7} xl={8.7} sx={{
+                  {!isMobile && <Grid xs={0} md={0.3} lg={0.3} xl={0.3}></Grid>}
+                  {!isMobile && <Grid xs={12} md={6.7} lg={7.7} xl={8.7} sx={{
                     padding: {
                       xs: theme.spacing(2),
                       sm: theme.spacing(0),
                     }
                   }}>
                     <Routes />
-                  </Grid>
+                  </Grid>}
                 </Grid>
               ) : <Routes />}
             </Container>

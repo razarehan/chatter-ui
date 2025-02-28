@@ -11,6 +11,7 @@ import InfiniteScroll from "react-infinite-scroller";
 
 const Chat = () => {
   let params = useParams<{ _id: string }>();
+  const isMobile = window.innerWidth < 900;
   const chatId = params?._id || '';
   const [message, setMessage] = useState("");
   const { data } = useGetChat({ _id: chatId! });
@@ -45,7 +46,7 @@ const Chat = () => {
   return <>
     <Stack sx={{ height: '100%', justifyContent: 'space-between' }}>
       <h1 className="chat-header-text">{data?.chat.name}</h1>
-      <Box sx={{ height: "100%", overflow: "auto" }}>
+      <Box sx={{ height: "100%", overflow: "auto", padding: "0px 1rem" }}>
         <InfiniteScroll
           pageStart={0}
           isReverse={true}
@@ -92,7 +93,7 @@ const Chat = () => {
         justifySelf: 'flex-end',
         alignItems: 'center',
         width: '100%',
-        margin: "1rem 0px"
+        margin: "1rem 0px 0px"
       }}>
         <InputBase
           onChange={(event) => setMessage(event.target.value)}

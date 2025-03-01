@@ -39,6 +39,8 @@ const Chat = () => {
   }, [location.pathname, messages]);
 
   const handleCreateMessage = async () => {
+    if (message === "") return;
+
     await createMessage({ variables: { createMessageInput: { content: message, chatId } } });
     setMessage("");
     scrollToBottom();

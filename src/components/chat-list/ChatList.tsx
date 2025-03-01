@@ -48,7 +48,7 @@ export default function ChatList() {
             loadMore={() =>
               fetchMore({
                 variables: {
-                  skip: data?.chats.length
+                  skip: data?.chats.length ?? 0,
                 }
               })
             }
@@ -64,7 +64,7 @@ export default function ChatList() {
                   new Date(chatB.latestMessage?.createdAt).getTime()
                 )
               }).map(chat => (
-                <ChatListItem chat={chat} selected={chat._id === selectedChatId} />
+                <ChatListItem key={chat._id} chat={chat} selected={chat._id === selectedChatId} />
               )).reverse()
             }
           </InfiniteScroll>
